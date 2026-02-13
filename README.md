@@ -13,7 +13,6 @@ The goal of this checkpoint is to understand the **EB-NeRD** dataset and extract
 - [Repository Structure](#repository-structure)
 - [Setup](#setup)
 - [How to Run](#how-to-run)
-- [Figures Gallery (Quick View)](#figures-gallery-quick-view)
 - [EDA Results (with Figures)](#eda-results-with-figures)
 - [Key Findings Summary](#key-findings-summary)
 - [Notes / Assumptions](#notes--assumptions)
@@ -104,40 +103,52 @@ Open `Project Checkpoint 1.ipynb` and run all cells.
 
 ---
 
-## Figures Gallery (Quick View)
-These are the figures generated from the EDA notebook.
-
-<p float="left">
-  <img src="assets/figures/popularity_longtail.png" width="400" />
-  <img src="assets/figures/daily_interaction_volume.png" width="400" /> 
-  <img src="assets/figures/user_activity_clicks_per_user.png" width="400" />
-  <img src="assets/figures/read_time_distribution.png" width="400" />
-  <img src="assets/figures/scroll_depth_distribution.png" width="400" />
-</p>
-
----
-
 ## EDA Results (with Figures)
 
 ### 1) Article Popularity Distribution (Long Tail Evidence)
-**What this shows:** Clicks are highly concentrated on a small set of articles.  
-**Why it matters:** Simple popularity-based baselines can dominate, and models can become biased toward already-popular items.
+<img src="assets/figures/popularity_longtail.png" width="600" />
+
+**What this shows:**  
+The graph shows the click frequency for articles. The curve drops sharply, indicating that a very small percentage of articles receive the majority of clicks, while most articles get very few.
+
+**Why it matters:**  
+This extreme **long-tail distribution** means that popularity-based baselines will be strong but biased. Recommender models need to be careful not to just recommend the "head" (popular items) and ignore the "tail" (niche items), which makes personalization harder.
 
 ### 2) Daily Interaction Volume
-**What this shows:** Daily click activity varies across dates.  
-**Why it matters:** Train/validation/test splits should be time-based and temporal signals (recency) can help.
+<img src="assets/figures/daily_interaction_volume.png" width="600" />
+
+**What this shows:**  
+This plot tracks the total number of user interactions (clicks/impressions) per day over the dataset's timespan.
+
+**Why it matters:**  
+News consumption is not static; it fluctuates by day of the week and breaking news events. This suggests that **time-based splitting** (training on past days, testing on future days) is crucial for realistic evaluation. It also highlights the need for models to handle **temporal dynamics**.
 
 ### 3) Distribution of User Activity (Clicks per User)
-**What this shows:** Most users have low click counts while a small number are highly active.  
-**Why it matters:** Cold-start users require special handling (popular/recency baselines, hybrid methods).
+<img src="assets/figures/user_activity_clicks_per_user.png" width="600" />
+
+**What this shows:**  
+This histogram displays how many clicks individual users perform. The distribution is heavily skewed to the right.
+
+**Why it matters:**  
+Most users have very few interactions (1-2 clicks), creating a significant **cold-start problem**. Models cannot rely solely on collaborative filtering (history-based) methods for these users and must leverage content features or popularity/recency baselines.
 
 ### 4) Engagement Signals: Read Time
-**What this shows:** Read times are skewed; many sessions are short, with a long tail of longer reads.  
-**Why it matters:** Read time can be used as an implicit feedback signal (weighting clicks by engagement).
+<img src="assets/figures/read_time_distribution.png" width="600" />
+
+**What this shows:**  
+The distribution of time users spend reading articles. It is skewed similarly to the other metrics, with many short sessions and fewer long deep-dives.
+
+**Why it matters:**  
+**Read time** is a strong implicit signal of satisfaction. A click with a 5-second read time is less valuable than a 2-minute read. We can use this to weight our training samples (e.g., negative sampling short clicks) to optimize for engagement rather than just click-through rate (CTR).
 
 ### 5) Engagement Signals: Scroll Depth
-**What this shows:** Scroll depth provides another implicit engagement proxy (how much the user consumed).  
-**Why it matters:** Can be used to filter low-quality interactions or weight training examples.
+<img src="assets/figures/scroll_depth_distribution.png" width="600" />
+
+**What this shows:**  
+This shows how far down the page users scroll when reading an article.
+
+**Why it matters:**  
+**Scroll depth** is another proxy for interest. High scroll depth indicates the user consumed the content. Combined with read time, this helps filter out "accidental" or "low-quality" clicks, improving the quality of the data fed into the recommender system.
 
 ---
 
