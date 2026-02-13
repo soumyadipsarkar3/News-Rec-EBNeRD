@@ -41,21 +41,24 @@ Place the dataset parquet file here (same path assumed in the notebook):
 
 ```text
 data/train/behaviors.parquet
+```
 Note: The dataset is not included in this repo due to size / licensing constraints.
 
-Download instructions
-Download EB-NeRD from the official source provided by the authors / course.
+### Download instructions
+1. Download EB-NeRD from the official source provided by the authors / course.
+2. Unzip it locally.
+3. Create the folder structure:
+   ```
+   data/
+   └── train/
+       └── behaviors.parquet
+   ```
+4. Run the notebook.
 
-Unzip it locally.
+---
 
-Create the folder structure:
-
-data/
-└── train/
-    └── behaviors.parquet
-Run the notebook.
-
-Repository Structure
+## Repository Structure
+```
 .
 ├── Project Checkpoint 1.ipynb
 ├── README.md
@@ -66,76 +69,100 @@ Repository Structure
         ├── user_activity_clicks_per_user.png
         ├── read_time_distribution.png
         └── scroll_depth_distribution.png
-Setup
-Option A: Quick install (minimum)
+```
+
+---
+
+## Setup
+### Option A: Quick install (minimum)
+```bash
 pip install pandas numpy matplotlib seaborn pyarrow
-Option B: Recommended (virtual environment)
+```
+
+### Option B: Recommended (virtual environment)
+```bash
 python -m venv .venv
 source .venv/bin/activate     # Windows: .venv\Scripts\activate
 pip install pandas numpy matplotlib seaborn pyarrow
-How to Run
-Google Colab
-Upload the dataset file into the Colab workspace so it exists at:
+```
 
-data/train/behaviors.parquet
-Open Project Checkpoint 1.ipynb
+---
 
-Run all cells from top to bottom.
+## How to Run
 
-Local (Jupyter)
+### Google Colab
+1. Upload the dataset file into the Colab workspace so it exists at: `data/train/behaviors.parquet`
+2. Open `Project Checkpoint 1.ipynb`
+3. Run all cells from top to bottom.
+
+### Local (Jupyter)
+```bash
 pip install notebook
 jupyter notebook
-Open Project Checkpoint 1.ipynb and run all cells.
+```
+Open `Project Checkpoint 1.ipynb` and run all cells.
 
-Figures Gallery (Quick View)
+---
+
+## Figures Gallery (Quick View)
 These are the figures generated from the EDA notebook.
 
-<img src="assets/figures/popularity_longtail.png" width="850" /> <img src="assets/figures/daily_interaction_volume.png" width="850" /> <img src="assets/figures/user_activity_clicks_per_user.png" width="850" /> <img src="assets/figures/read_time_distribution.png" width="850" /> <img src="assets/figures/scroll_depth_distribution.png" width="850" />
-EDA Results (with Figures)
-1) Article Popularity Distribution (Long Tail Evidence)
-What this shows: Clicks are highly concentrated on a small set of articles.
-Why it matters: Simple popularity-based baselines can dominate, and models can become biased toward already-popular items.
+<p float="left">
+  <img src="assets/figures/popularity_longtail.png" width="400" />
+  <img src="assets/figures/daily_interaction_volume.png" width="400" /> 
+  <img src="assets/figures/user_activity_clicks_per_user.png" width="400" />
+  <img src="assets/figures/read_time_distribution.png" width="400" />
+  <img src="assets/figures/scroll_depth_distribution.png" width="400" />
+</p>
 
-2) Daily Interaction Volume
-What this shows: Daily click activity varies across dates.
-Why it matters: Train/validation/test splits should be time-based and temporal signals (recency) can help.
+---
 
-3) Distribution of User Activity (Clicks per User)
-What this shows: Most users have low click counts while a small number are highly active.
-Why it matters: Cold-start users require special handling (popular/recency baselines, hybrid methods).
+## EDA Results (with Figures)
 
-4) Engagement Signals: Read Time
-What this shows: Read times are skewed; many sessions are short, with a long tail of longer reads.
-Why it matters: Read time can be used as an implicit feedback signal (weighting clicks by engagement).
+### 1) Article Popularity Distribution (Long Tail Evidence)
+**What this shows:** Clicks are highly concentrated on a small set of articles.  
+**Why it matters:** Simple popularity-based baselines can dominate, and models can become biased toward already-popular items.
 
-5) Engagement Signals: Scroll Depth
-What this shows: Scroll depth provides another implicit engagement proxy (how much the user consumed).
-Why it matters: Can be used to filter low-quality interactions or weight training examples.
+### 2) Daily Interaction Volume
+**What this shows:** Daily click activity varies across dates.  
+**Why it matters:** Train/validation/test splits should be time-based and temporal signals (recency) can help.
 
-Key Findings Summary
-Popularity Bias: Strong long-tail behavior in clicks (few articles dominate).
+### 3) Distribution of User Activity (Clicks per User)
+**What this shows:** Most users have low click counts while a small number are highly active.  
+**Why it matters:** Cold-start users require special handling (popular/recency baselines, hybrid methods).
 
-User Activity: Many users have little history → cold-start is significant.
+### 4) Engagement Signals: Read Time
+**What this shows:** Read times are skewed; many sessions are short, with a long tail of longer reads.  
+**Why it matters:** Read time can be used as an implicit feedback signal (weighting clicks by engagement).
 
-Engagement: Read-time and scroll-depth distributions are skewed but useful for implicit feedback.
+### 5) Engagement Signals: Scroll Depth
+**What this shows:** Scroll depth provides another implicit engagement proxy (how much the user consumed).  
+**Why it matters:** Can be used to filter low-quality interactions or weight training examples.
 
-Temporal Effects: Daily interaction volume varies → time-based evaluation is important.
+---
 
-Notes / Assumptions
-Dataset files are not committed to GitHub.
+## Key Findings Summary
+- **Popularity Bias:** Strong long-tail behavior in clicks (few articles dominate).
+- **User Activity:** Many users have little history → cold-start is significant.
+- **Engagement:** Read-time and scroll-depth distributions are skewed but useful for implicit feedback.
+- **Temporal Effects:** Daily interaction volume varies → time-based evaluation is important.
 
-All figures are generated from the EDA notebook and stored in assets/figures/.
+---
 
-Some columns may contain missing values; cleaning decisions are documented in the notebook.
+## Notes / Assumptions
+- Dataset files are not committed to GitHub.
+- All figures are generated from the EDA notebook and stored in `assets/figures/`.
+- Some columns may contain missing values; cleaning decisions are documented in the notebook.
 
-Next Steps
-Implement baselines: MostPopular, Recency
+---
 
-Use time-based splits for evaluation
+## Next Steps
+- Implement baselines: MostPopular, Recency
+- Use time-based splits for evaluation
+- Evaluate with ranking metrics: NDCG@K, HR@K, MRR
+- Explore debiasing / reranking strategies to reduce popularity bias
 
-Evaluate with ranking metrics: NDCG@K, HR@K, MRR
+---
 
-Explore debiasing / reranking strategies to reduce popularity bias
-
-Citation
+## Citation
 If you use EB-NeRD, cite the dataset / paper according to course and dataset author requirements.
