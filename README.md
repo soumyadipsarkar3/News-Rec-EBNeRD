@@ -1,23 +1,24 @@
 # Three Problems, Three Methods: A Sequential News Recommendation System
 
+## 1) Overview
+
 Modern news recommendation is harder than “rank what’s popular.” Real readers are **heterogeneous** (from casual browsers to deep readers), consumption is **sequential** (threaded exploration across articles), and a meaningful slice of traffic is **cold-start** (little to no history). This project builds a practical, story-driven recommendation pipeline on the **EB‑NeRD** dataset that treats these as *three distinct problems*—and shows why **one algorithm cannot solve all three well**. The key contribution is the **composition**: segment users by engagement, mine order-aware reading patterns, and route sparse-history users to a sequential deep model designed for short interaction traces.
 
-## 2) Pointer to `main_notebook.ipynb`
-🎥 https://www.youtube.com/watch?v=ua6LKzbVGfk
+## 2) Start Here
 
 👉 **Start here:** **[`main_notebook.ipynb`](main_notebook.ipynb)**
 
-## 3) Research questions
+## 3) Project Video
+
+🎥 **Project video:** https://www.youtube.com/watch?v=ua6LKzbVGfk
+
+## 4) Research questions
 
 **RQ1 — User heterogeneity:** Do users cluster into interpretable engagement tiers (e.g., skimmers vs deep readers), and can those tiers guide what “good recommendations” should prioritize?
 
 **RQ2 — Sequential reading:** How often do sessions follow multi-article reading trails, and what *order-aware* patterns predict the next article better than unordered co-occurrence rules?
 
 **RQ3 — Cold-start:** For users with extremely short histories, can a Transformer-based sequential recommender outperform simple baselines by extracting signal from minimal evidence?
-
-## 4) Project video
-
-🎥 **[YouTube video — to be added]**
 
 ## 5) Data (EB‑NeRD)
 
@@ -41,17 +42,16 @@ This project was developed and run in **Google Colab**.
 
 1. **Open** `main_notebook.ipynb` in Colab.
 2. **Upload data** to `/content/behaviors.parquet`.
-3. **Install dependencies** (from repo root `requirements.txt`):
+3. **Install dependencies** using the pinned environment in `requirements.txt` at the repo root:
 
    ```bash
    pip install -r requirements.txt
    ```
 
    (In Colab, run `!pip install -r requirements.txt` in a cell.)
-4. **Run notebooks in this order**:
-   - `main_notebook.ipynb` (final curated analysis + results)
-   - `checkpoints/checkpoint_1.ipynb` (project progression: EDA + problem diagnosis)
-   - `checkpoints/checkpoint_2.ipynb` (project progression: feasibility + method prototypes)
+4. **Run** `main_notebook.ipynb` from **top to bottom**. This notebook contains the full curated narrative, analyses, figures, and evaluation.
+
+Checkpoint notebooks **`checkpoints/checkpoint_1.ipynb`** and **`checkpoints/checkpoint_2.ipynb`** are retained to document **project progression** (how the work evolved from exploration to the final pipeline). They are **not required** before the deliverable notebook and **do not need** to be executed for grading or reproducibility if you rely on `main_notebook.ipynb`.
 
 ![Daily interaction volume](assets/figures/daily_interaction_volume.png)
 *Figure: Interaction volume varies over time, reinforcing the need for realistic evaluation and time-aware thinking in news recommendation.*
@@ -65,7 +65,7 @@ This project was developed and run in **Google Colab**.
 - **prefixspan**: (sequential pattern mining)
 - **torch**: 2.x (SASRec)
 
-The full environment is captured in `requirements.txt`.
+The full pinned environment is captured in `requirements.txt` at the repository root.
 
 ## 8) Repo structure
 
@@ -127,9 +127,31 @@ The big takeaway is that EB‑NeRD is a **high-bias, high-sparsity, sequence-hea
 ![SASRec evaluation](assets/figures/sasrec_evaluation.png)
 *Figure: Comparative evaluation summary used to assess the cold-start recommendation approach (see notebook for metrics and setup).*
 
-## Checkpoint Progression
+## 10) Checkpoint progression
 
-Checkpoint 1 established the data story (popularity bias, heterogeneity, and sequential sessions) and defined what a realistic recommendation setting looks like on EB‑NeRD. Checkpoint 2 translated that diagnosis into feasible method choices—segmentation, sequential pattern mining, and a Transformer sequential model—setting up the final notebook as a curated end-to-end narrative where the contribution is the **integrated system**, not isolated experiments.
+Checkpoint 1 (`checkpoints/checkpoint_1.ipynb`) documents early exploration: popularity bias, user heterogeneity, and sequential-session behavior—establishing what a credible recommendation setting looks like on EB‑NeRD. Checkpoint 2 (`checkpoints/checkpoint_2.ipynb`) records feasibility prototyping and methodological choices toward segmentation, pattern mining, and sequential modeling.
+
+The **`main_notebook.ipynb`** deliverable distills these steps into one coherent narrative. The checkpoints remain in the repository as transparency for how the work evolved across the semester; they complement the main notebook without defining a mandatory execution sequence for readers.
+
+## Collaboration Declaration
+
+**Project:** Final Deliverable, EB-NeRD News Recommendation System  
+**Course:** CSCE 676, Data Mining, Spring 2026  
+**Student:** Soumyadip Sarkar  
+**Date:** April 27, 2026  
+
+### Collaborators
+
+None. This was completed as an individual project.
+
+### AI Tools Used
+
+| Tool | Used for |
+|---|---|
+| Google Gemini | Debugging notebook errors, checking pandas syntax, and reviewing metric interpretation |
+| ChatGPT | Explaining recommendation methods, improving notebook structure, debugging Python code, and polishing markdown explanations |
+| GitHub Copilot | Autocompleting Python, pandas, sklearn, and PyTorch code snippets |
+| Claude | Reviewing notebook flow, improving written explanations, and cleaning markdown formatting |
 
 ## Limitations & Future Work
 
@@ -139,5 +161,21 @@ Checkpoint 1 established the data story (popularity bias, heterogeneity, and seq
 - **Clustering assumptions**: K-means favors roughly spherical clusters; alternative models (GMM, density-based) may capture irregular behavior better.
 - **Pattern mining coverage**: frequent pattern methods can miss rare-but-important trails; scaling and sampling choices matter for recall.
 - **Content understanding**: this work primarily uses behavioral traces; adding text/topic embeddings and entity signals could improve personalization and robustness.
+
+## References
+
+[1] Ekstra Bladet News Recommendation Dataset, EB-NeRD. RecSys 2024 Challenge. https://recsys.acm.org/recsys24/challenge/
+
+[2] Kang, W.-C., and McAuley, J. (2018). Self-Attentive Sequential Recommendation. ICDM 2018. https://arxiv.org/abs/1808.09781
+
+[3] Sun, F., Liu, J., Wu, J., Pei, C., Lin, X., Ou, W., and Jiang, P. (2019). BERT4Rec. CIKM 2019. https://arxiv.org/abs/1904.06690
+
+[4] Agrawal, R., and Srikant, R. (1994). Fast Algorithms for Mining Association Rules. VLDB 1994.
+
+[5] Pei, J., Han, J., Mortazavi-Asl, B., Pinto, H., Chen, Q., Dayal, U., and Hsu, M.-C. (2001). PrefixSpan. ICDE 2001.
+
+[6] Aggarwal, C. C. (2016). Recommender Systems: The Textbook. Springer.
+
+[7] Tan, P.-N., Steinbach, M., and Kumar, V. (2005). Introduction to Data Mining. Pearson.
 
 CSCE 676 (Data Mining), Texas A&M University — Spring 2026
