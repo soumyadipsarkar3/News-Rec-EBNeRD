@@ -6,11 +6,11 @@ Modern news recommendation is harder than “rank what’s popular.” Real read
 
 ## 2) Start Here
 
-👉 **Start here:** **[`main_notebook.ipynb`](main_notebook.ipynb)**
+**Start here:** **[`main_notebook.ipynb`](main_notebook.ipynb)**
 
 ## 3) Project Video
 
-🎥 **Project video:** https://www.youtube.com/watch?v=ua6LKzbVGfk
+**Project video:** https://www.youtube.com/watch?v=ua6LKzbVGfk
 
 ## 4) Inside the Notebook: What You'll Find
 
