@@ -11,12 +11,19 @@ The EB-NeRD (Ekstra Bladet News Recommendation Dataset) is required to run the n
 3. Unzip locally
 
 ### Local Setup (Jupyter/Local Machine)
-News-Rec-EBNeRD/
-├── data/
-│   └── train/
-│       └── behaviors.parquet    ← Place the file here
 
-After downloading, place `behaviors.parquet` at `data/train/behaviors.parquet`.
+Create the folders if they do not exist, then place **`behaviors.parquet`** at the path below (relative to the repository root).
+
+Expected layout:
+
+```text
+News-Rec-EBNeRD/
+└── data/
+    └── train/
+        └── behaviors.parquet   ← your downloaded file goes here
+```
+
+**Target path:** `data/train/behaviors.parquet`
 
 ### Google Colab Setup
 
