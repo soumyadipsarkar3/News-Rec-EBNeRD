@@ -1,179 +1,95 @@
-# News Recommendation Analysis with EB-NeRD  
-**CSCE 676: Data Mining — Spring 2026**  
-**Checkpoint 1 — Dataset Selection + Exploratory Data Analysis (EDA)**
+# EB-NeRD News Recommendation: From Behavior Mining to Robust Recommenders
 
-This repository contains the work for **Checkpoint 1** of the course project.  
-The goal of this checkpoint is to understand the **EB-NeRD** dataset and extract insights that affect **news recommendation** (bias, user behavior, engagement, and temporal patterns).
+I’m building a news recommender pipeline on **EB‑NeRD** to answer a practical question: *how do we make recommendations that work in the real world—where attention is scarce, popularity dominates, and many users have almost no history?* This repo contains my **CSCE 676 (Data Mining), Spring 2026** project work and checkpoints.
 
----
+- **Main notebook (final deliverable)**: `main_notebook.ipynb` *(placeholder — coming soon; not pushed yet)*
+- **Checkpoint 2 notebook**: `checkpoint_2.ipynb`
+- **Checkpoint 1 notebook**: `checkpoint_1.ipynb`
+- **Video demo**: **[YouTube video link — to be added]**
 
-## Table of Contents
-- [Project Overview](#project-overview)
-- [Dataset](#dataset)
-- [Repository Structure](#repository-structure)
-- [Setup](#setup)
-- [How to Run](#how-to-run)
-- [EDA Results (with Figures)](#eda-results-with-figures)
-- [Key Findings Summary](#key-findings-summary)
-- [Notes / Assumptions](#notes--assumptions)
-- [Next Steps](#next-steps)
-- [Citation](#citation)
+## Headline results (so far)
 
----
+- **11.7M** cleaned interactions across **787K** users
+- **44.1%** of sessions contain **multi‑article sequences**
+- **19.1%** of users are **cold‑start** \((<3 clicks)\)
+- **K‑means** found **5** user tiers with **silhouette = 0.58**
+- **Gini = 0.69**, indicating **strong popularity bias**
 
-## Project Overview
-News recommendation is challenging because:
-- clicks follow a **long-tail / popularity bias**,
-- many users have little history (**cold start**),
-- engagement feedback (read time, scroll depth) is **skewed**,
-- user activity changes over time (**temporal effects**).
+## Research questions
 
-In this checkpoint, we run EDA on EB-NeRD to quantify these issues and prepare for building recommenders in later checkpoints.
+News recommendation looks deceptively simple—rank articles by clicks—but that quickly collapses into a popularity-only system. My first question is: **how severe is popularity bias in EB‑NeRD, and how does it shape what “good recommendations” even mean?** Quantifying the long tail and concentration (e.g., Gini) is foundational for choosing baselines and evaluation strategies.
 
----
+Second, news is consumed in **bursts and sequences**, not as isolated clicks. So I ask: **how often do sessions contain meaningful multi-article behavior, and can we treat those sequences as a signal for next‑item recommendation?** If a large fraction of sessions have multi‑step reading trails, sequential models and pattern mining become relevant—not just matrix factorization.
 
-## Dataset
-**Dataset:** EB-NeRD (Ekstra Bladet News Recommendation Dataset)
+Third, I’m interested in product realism: **how do we handle cold-start users and heterogeneous engagement levels?** In practice, many users have tiny histories, while a smaller set drives most interactions. Segmenting users into tiers and measuring cold-start prevalence guides which models are feasible (content-first, recency, popularity-with-constraints, hybrid methods).
 
-### Expected path used in notebook
-Place the dataset parquet file here (same path assumed in the notebook):
+## Quick visuals (from Checkpoint 1 EDA)
+
+![Popularity long tail](assets/figures/popularity_longtail.png)
+
+![User activity distribution](assets/figures/user_activity_clicks_per_user.png)
+
+## Dataset (EB‑NeRD)
+
+- **Dataset**: EB‑NeRD (Ekstra Bladet News Recommendation Dataset)
+- **Download**: `https://recsys.acm.org/recsys24/challenge/`
+- **Scale (current pipeline)**: **11.7M** cleaned interactions, **787K** users
+- **Cleaning rule**: remove reads with **read time < 5 seconds** (about **2.7%** of raw data)
+
+### Data placement (required)
+
+- **Colab**: upload to `/content/behaviors.parquet`
+- **Local**: place at `data/train/behaviors.parquet`
+
+See `data/README.md` for the exact expected layout.
+
+## How to reproduce (Google Colab)
+
+1. Open the notebook you want to run in Colab:
+   - `checkpoint_2.ipynb` (Checkpoint 2), or
+   - `checkpoint_1.ipynb` (Checkpoint 1)
+2. Upload the dataset parquet to Colab so it exists at:
+   - `/content/behaviors.parquet`
+3. Install dependencies (either via `pip install -r requirements.txt` after you populate it, or direct installs).
+4. Run all cells top-to-bottom.
+
+## Key dependencies
+
+This project targets:
+
+- **Python**: 3.11
+- **Core**: `pandas` 2.x, `scikit-learn` 1.x
+- **Pattern mining / utilities**: `mlxtend`, `prefixspan`
+- **Deep learning**: `torch` 2.x
+
+*(Pinned versions will be added after freezing the environment into `requirements.txt`.)*
+
+## Repo structure (current + planned)
 
 ```text
-data/train/behaviors.parquet
-```
-Note: The dataset is not included in this repo due to size / licensing constraints.
-
-### Download instructions
-1. Download EB-NeRD from the official source provided by the authors / course.
-2. Unzip it locally.
-3. Create the folder structure:
-   ```
-   data/
-   └── train/
-       └── behaviors.parquet
-   ```
-4. Run the notebook.
-
----
-
-## Repository Structure
-```
 .
-├── Project Checkpoint 1.ipynb
-├── README.md
-└── assets/
-    └── figures/
-        ├── popularity_longtail.png
-        ├── daily_interaction_volume.png
-        ├── user_activity_clicks_per_user.png
-        ├── read_time_distribution.png
-        └── scroll_depth_distribution.png
+├── checkpoint_1.ipynb
+├── checkpoint_2.ipynb
+├── main_notebook.ipynb                # placeholder; not pushed yet
+├── assets/
+│   └── figures/
+│       ├── popularity_longtail.png
+│       ├── user_activity_clicks_per_user.png
+│       ├── daily_interaction_volume.png
+│       ├── read_time_distribution.png
+│       └── scroll_depth_distribution.png
+├── data/
+│   ├── README.md                      # data placement instructions
+│   └── train/                         # local-only (ignored by git)
+│       └── behaviors.parquet          # local-only (ignored by git)
+└── checkpoints/                       # planned: per-checkpoint exports
+    └── ...                            # (folder may be added later)
 ```
 
----
+## Results summary
 
-## Setup
-### Option A: Quick install (minimum)
-```bash
-pip install pandas numpy matplotlib seaborn pyarrow
-```
+The core takeaway so far: **EB‑NeRD has strong popularity concentration and a large cold-start segment**, so any recommender that works here must be robust to sparse histories and biased feedback—not just optimize clicks.
 
-### Option B: Recommended (virtual environment)
-```bash
-python -m venv .venv
-source .venv/bin/activate     # Windows: .venv\Scripts\activate
-pip install pandas numpy matplotlib seaborn pyarrow
-```
+## Course context
 
----
-
-## How to Run
-
-### Google Colab
-1. Upload the dataset file into the Colab workspace so it exists at: `data/train/behaviors.parquet`
-2. Open `Project Checkpoint 1.ipynb`
-3. Run all cells from top to bottom.
-
-### Local (Jupyter)
-```bash
-pip install notebook
-jupyter notebook
-```
-Open `Project Checkpoint 1.ipynb` and run all cells.
-
----
-
-## EDA Results (with Figures)
-
-### 1) Article Popularity Distribution (Long Tail Evidence)
-<img src="assets/figures/popularity_longtail.png" width="600" />
-
-**What this shows:**  
-The graph shows the click frequency for articles. The curve drops sharply, indicating that a very small percentage of articles receive the majority of clicks, while most articles get very few.
-
-**Why it matters:**  
-This extreme **long-tail distribution** means that popularity-based baselines will be strong but biased. Recommender models need to be careful not to just recommend the "head" (popular items) and ignore the "tail" (niche items), which makes personalization harder.
-
-### 2) Daily Interaction Volume
-<img src="assets/figures/daily_interaction_volume.png" width="600" />
-
-**What this shows:**  
-This plot tracks the total number of user interactions (clicks/impressions) per day over the dataset's timespan.
-
-**Why it matters:**  
-News consumption is not static; it fluctuates by day of the week and breaking news events. This suggests that **time-based splitting** (training on past days, testing on future days) is crucial for realistic evaluation. It also highlights the need for models to handle **temporal dynamics**.
-
-### 3) Distribution of User Activity (Clicks per User)
-<img src="assets/figures/user_activity_clicks_per_user.png" width="600" />
-
-**What this shows:**  
-This histogram displays how many clicks individual users perform. The distribution is heavily skewed to the right.
-
-**Why it matters:**  
-Most users have very few interactions (1-2 clicks), creating a significant **cold-start problem**. Models cannot rely solely on collaborative filtering (history-based) methods for these users and must leverage content features or popularity/recency baselines.
-
-### 4) Engagement Signals: Read Time
-<img src="assets/figures/read_time_distribution.png" width="600" />
-
-**What this shows:**  
-The distribution of time users spend reading articles. It is skewed similarly to the other metrics, with many short sessions and fewer long deep-dives.
-
-**Why it matters:**  
-**Read time** is a strong implicit signal of satisfaction. A click with a 5-second read time is less valuable than a 2-minute read. We can use this to weight our training samples (e.g., negative sampling short clicks) to optimize for engagement rather than just click-through rate (CTR).
-
-### 5) Engagement Signals: Scroll Depth
-<img src="assets/figures/scroll_depth_distribution.png" width="600" />
-
-**What this shows:**  
-This shows how far down the page users scroll when reading an article.
-
-**Why it matters:**  
-**Scroll depth** is another proxy for interest. High scroll depth indicates the user consumed the content. Combined with read time, this helps filter out "accidental" or "low-quality" clicks, improving the quality of the data fed into the recommender system.
-
----
-
-## Key Findings Summary
-- **Popularity Bias:** Strong long-tail behavior in clicks (few articles dominate).
-- **User Activity:** Many users have little history → cold-start is significant.
-- **Engagement:** Read-time and scroll-depth distributions are skewed but useful for implicit feedback.
-- **Temporal Effects:** Daily interaction volume varies → time-based evaluation is important.
-
----
-
-## Notes / Assumptions
-- Dataset files are not committed to GitHub.
-- All figures are generated from the EDA notebook and stored in `assets/figures/`.
-- Some columns may contain missing values; cleaning decisions are documented in the notebook.
-
----
-
-## Next Steps
-- Implement baselines: MostPopular, Recency
-- Use time-based splits for evaluation
-- Evaluate with ranking metrics: NDCG@K, HR@K, MRR
-- Explore debiasing / reranking strategies to reduce popularity bias
-
----
-
-## Citation
-If you use EB-NeRD, cite the dataset / paper according to course and dataset author requirements.
+CSCE 676 (Data Mining), Texas A&M University — Spring 2026.

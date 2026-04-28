@@ -1,0 +1,17 @@
+# Template only — replace with your actual environment after:
+#   pip freeze > requirements.txt
+#
+# Required (rubric-aligned) core stack:
+# python==3.11.*
+# pandas==2.*
+# scikit-learn==1.*
+# mlxtend==0.*
+# prefixspan==0.*
+# torch==2.*
+#
+# Typical notebook/data tooling:
+# numpy==*
+# pyarrow==*
+# matplotlib==*
+# seaborn==*
+# jupyter==*
