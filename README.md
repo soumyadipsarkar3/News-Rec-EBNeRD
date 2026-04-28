@@ -12,7 +12,26 @@ Modern news recommendation is harder than “rank what’s popular.” Real read
 
 🎥 **Project video:** https://www.youtube.com/watch?v=ua6LKzbVGfk
 
-## 4) Research questions
+## 4) Inside the Notebook: What You'll Find
+
+The main notebook is organized as a guided project story, not just a collection of code cells. It starts with the motivation and dataset, then moves through three research questions, and ends by combining the results into one unified recommendation pipeline.
+
+| Section | What It Covers |
+|---|---|
+| **Section 1** | Executive summary of the project, approach, and headline results |
+| **Section 2** | Motivation, EB-NeRD dataset description, cleaning, and research questions |
+| **Section 3** | RQ1: User segmentation using K-Means clustering |
+| **Section 4** | RQ2: Sequential pattern mining using Apriori and PrefixSpan |
+| **Section 5** | RQ3: Cold-start recommendation using SASRec |
+| **Section 6** | Cross-RQ synthesis and unified recommendation pipeline |
+| **Section 7** | Limitations of the current analysis |
+| **Section 8** | Final conclusion and project takeaways |
+| **Section 9** | Collaboration declaration and references |
+| **Section 10** | Environment export and reproducibility step |
+
+The recommended reading path is to start with `main_notebook.ipynb`, then review the checkpoint notebooks only if you want to see how the project evolved over the semester.
+
+## 5) Research questions
 
 **RQ1 — User heterogeneity:** Do users cluster into interpretable engagement tiers (e.g., skimmers vs deep readers), and can those tiers guide what “good recommendations” should prioritize?
 
@@ -20,7 +39,7 @@ Modern news recommendation is harder than “rank what’s popular.” Real read
 
 **RQ3 — Cold-start:** For users with extremely short histories, can a Transformer-based sequential recommender outperform simple baselines by extracting signal from minimal evidence?
 
-## 5) Data (EB‑NeRD)
+## 6) Data (EB‑NeRD)
 
 - **Dataset**: EB‑NeRD (Ekstra Bladet News Recommendation Dataset), released for the ACM RecSys Challenge
 - **Download**: `https://recsys.acm.org/recsys24/challenge/`
@@ -36,7 +55,7 @@ See `data/README.md` for the exact expected layout.
 ![Popularity long-tail](assets/figures/popularity_longtail.png)
 *Figure: Clicks follow a strong long-tail—popularity is a powerful baseline, but also a major bias source (Gini quantified below).*
 
-## 6) How to reproduce (Google Colab)
+## 7) How to reproduce (Google Colab)
 
 This project was developed and run in **Google Colab**.
 
@@ -56,18 +75,26 @@ Checkpoint notebooks **`checkpoints/checkpoint_1.ipynb`** and **`checkpoints/che
 ![Daily interaction volume](assets/figures/daily_interaction_volume.png)
 *Figure: Interaction volume varies over time, reinforcing the need for realistic evaluation and time-aware thinking in news recommendation.*
 
-## 7) Key dependencies & versions
+## 8) Key dependencies & versions
 
-- **Python**: 3.11
-- **pandas**: 2.x
-- **scikit-learn**: 1.x
-- **mlxtend**: (Apriori / frequent itemset mining)
-- **prefixspan**: (sequential pattern mining)
-- **torch**: 2.x (SASRec)
+The table below lists the main libraries used in the project. Exact pinned versions are available in `requirements.txt`.
+
+| Package | Version | Purpose |
+|---|---:|---|
+| Python | 3.11 / Colab runtime | Runtime environment |
+| pandas | 2.2.2 | Data manipulation |
+| numpy | 2.0.2 | Numerical computing |
+| scikit-learn | 1.6.1 | K-Means, scaling, evaluation metrics |
+| matplotlib | 3.10.0 | Plotting |
+| seaborn | 0.13.2 | Statistical visualization |
+| mlxtend | 0.23.4 | Apriori and association rules |
+| prefixspan | 0.5.2 | Sequential pattern mining |
+| pyarrow | 18.1.0 | Reading parquet files |
+| torch | 2.10.0+cu128 | SASRec deep learning model |
 
 The full pinned environment is captured in `requirements.txt` at the repository root.
 
-## 8) Repo structure
+## 9) Repo structure
 
 ```text
 News-Rec-EBNeRD/
@@ -96,7 +123,7 @@ News-Rec-EBNeRD/
         └── sasrec_evaluation.png
 ```
 
-## 9) Results summary
+## 10) Results summary
 
 - **11.7M** cleaned interactions across **787K** users  
 - **44.1%** of sessions contain **multi-article sequences**  
@@ -127,7 +154,7 @@ The big takeaway is that EB‑NeRD is a **high-bias, high-sparsity, sequence-hea
 ![SASRec evaluation](assets/figures/sasrec_evaluation.png)
 *Figure: Comparative evaluation summary used to assess the cold-start recommendation approach (see notebook for metrics and setup).*
 
-## 10) Checkpoint progression
+## 11) Checkpoint progression
 
 Checkpoint 1 (`checkpoints/checkpoint_1.ipynb`) documents early exploration: popularity bias, user heterogeneity, and sequential-session behavior—establishing what a credible recommendation setting looks like on EB‑NeRD. Checkpoint 2 (`checkpoints/checkpoint_2.ipynb`) records feasibility prototyping and methodological choices toward segmentation, pattern mining, and sequential modeling.
 
