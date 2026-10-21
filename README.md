@@ -1,4 +1,4 @@
-# Three Problems, Three Methods: A Sequential News Recommendation System
+# A Sequential News Recommendation System
 
 ## 1) Overview
 
